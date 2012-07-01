@@ -7,9 +7,9 @@ import sys
 import numpy
 import random
 
-file_name, eps_string, conf_string = sys.argv[1:4]
+file_name, eps_string, confidence_string = sys.argv[1:4]
 eps = float(eps_string)
-confidence = float(conf_string)
+confidence = float(confidence_string)
 func = lambda x: x[0] + x[1] ## this is an example function to simulate data
 noise_level = 1 ## play with the noise level to see how this impacts the results
 
@@ -36,5 +36,5 @@ with open(file_name) as the_file:
 the_file.close()
 sigma2 = pow(numpy.std(diff2), 2)
 M = max(diff)
-numData = -numpy.log((1-confidence) / 2) * 2 * ( sigma2 + pow(M, 2) * eps / 3 ) / pow(eps, 2)
-print "You may need this many data points to have confidence in your regression: " + str(int(round(numData)))
+numData = -numpy.log((1 - confidence) / 2) * 2 * ( sigma2 + pow(M, 2) * eps / 3 ) / pow(eps, 2)
+print "You may need " + str(int(round(numData))) + " data points to have " + str(confidence * 100) + "% confidence in your regression with defect less than " +  eps_string
