@@ -23,7 +23,6 @@ def load_data ():
 	return train_data, test_data, train_labels, test_labels
 
 def mkl_binclass_modular (train_data, testdata, train_labels, test_labels, d1, d2):
-
         # create some Gaussian train/test matrix
     	tfeats = RealFeatures(train_data)
     	tkernel = GaussianKernel(128, d1)
@@ -52,7 +51,7 @@ def mkl_binclass_modular (train_data, testdata, train_labels, test_labels, d1, d
         mkl.set_interleaved_optimization_enabled(0)
 
     	# which norm to use for MKL
-    	mkl.set_mkl_norm(1) #2,3
+    	mkl.set_mkl_norm(2)
 
     	# set cost (neg, pos)
     	mkl.set_C(1, 1)
@@ -83,8 +82,16 @@ def mkl_binclass_modular (train_data, testdata, train_labels, test_labels, d1, d
 	return accu
 
 if __name__=='__main__':
+	max_accu = 0
+	d1m = d2m = 0
     	train_data, test_data, train_labels, test_labels = load_data()
-    	for d1 in [x * 0.1 for x in range(1, 11)]:
-  		for d2 in [x * 0.1 for x in range(1, 11)]:
+    	for d1 in [x * 0.2 for x in range(1, 11)]:
+  		for d2 in [x * 0.2 for x in range(1, 11)]:
     			accu = mkl_binclass_modular (train_data, test_data, train_labels, test_labels, d1, d2)
-			print '(' + str(d1) + ' ' + str(d2) + '): ' + str(accu)
+			print '(' + str(d1) + ' , ' + str(d2) + '): accuracy = ' + str(accu)
+			if accu > max_accu:
+				max_accu = accu
+				d1m = d1
+				d2m = d2
+	print '========================================================='
+	print 'Best one is -- (' + str(d1m) + ' , ' + str(d2m) + '): accuracy = ' + str(max_accu)
